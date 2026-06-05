@@ -63,7 +63,9 @@ export function NeonPreview({
   const lines = text.length ? text.split("\n") : [];
   const hasText = lines.some((l) => l.trim().length > 0);
   const numLines = Math.max(1, lines.length);
-  const longest = Math.max(1, ...lines.map((l) => [...l].length || 1));
+  // 行の「幅の単位数」（全角=1.0 / 半角=0.62）で最長行を求める。
+  // ※日本語を狭く見積もると板からはみ出して勝手に折り返すので、ここを正確に。
+  const longestUnits = Math.max(0.6, ...lines.map(lineUnits));
 
   // ── 板の縦横比・大きさ（壁に対する割合）。すべて板幅 cqw 基準で共通計算 ──
   const ratio = widthMm > 0 && heightMm > 0 ? widthMm / heightMm : 420 / 297;
@@ -88,7 +90,8 @@ export function NeonPreview({
   }
 
   // ── 文字サイズ（板いっぱい・余白少なめ）。compact でも完全に同じ値 ──
-  const widthFit = 92 / (longest * 0.74);
+  // 最長行が板幅の約94%に収まるサイズにする（nowrap と併用で折り返さない）
+  const widthFit = 94 / longestUnits;
   const heightFit = (boardHcqw * 0.84) / (numLines * 1.16);
   const fontCqw = clamp(Math.min(widthFit, heightFit), 4, 32);
 
@@ -173,7 +176,7 @@ export function NeonPreview({
             {hasText ? (
               <p className="leading-[1.06] tracking-tight" style={textStyle}>
                 {lines.map((line, i) => (
-                  <span key={i} className="block animate-flicker">
+                  <span key={i} className="block animate-flicker whitespace-nowrap">
                     {line || " "}
                   </span>
                 ))}
@@ -224,4 +227,19 @@ function withAlpha(hex: string, a: number): string {
 
 function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
+}
+
+/**
+ * 1行の「幅の単位数」を概算（全角=1.0 / 半角英数記号=0.62 / 半角カナ=0.5）。
+ * 日本語を狭く見積もると板からはみ出して勝手に折り返すため、これで文字サイズを決める。
+ */
+function lineUnits(line: string): number {
+  let u = 0;
+  for (const ch of line) {
+    const c = ch.codePointAt(0) ?? 0;
+    if (c >= 0xff61 && c <= 0xff9f) u += 0.5; // 半角カナ
+    else if (c <= 0x00ff) u += 0.62; // ASCII・ラテン（半角）
+    else u += 1.0; // 全角（ひらがな・カタカナ・漢字・全角記号 等）
+  }
+  return u;
 }
