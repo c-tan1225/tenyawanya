@@ -11,6 +11,7 @@ import {
   nearestPreset,
   estimateStrokesFromText,
   effectiveStrokes,
+  boardSizeMm,
   calcEstimate,
 } from "@/lib/estimate";
 import type { EstimateInput } from "@/lib/types";
@@ -42,6 +43,7 @@ function manual(partial: Partial<EstimateInput>): EstimateInput {
     color: "pink",
     font: "round",
     tubeStyle: "line",
+    orientation: "landscape",
     ...partial,
   };
 }
@@ -97,6 +99,18 @@ const r = calcEstimate(manual({ presetSize: "A2", strokes: 13 }));
 eq("税抜合計 = 32,400", r.subtotalExTax, 32400);
 eq("税込合計 = 35,640", r.totalIncTax, 35640);
 eq("内訳は3行（基本・追加画数・サイズ）", r.lines.length, 3);
+
+console.log("板の向き（orientation）");
+{
+  const land = boardSizeMm(manual({ presetSize: "A3", orientation: "landscape" }));
+  const port = boardSizeMm(manual({ presetSize: "A3", orientation: "portrait" }));
+  eq("横置き A3 = 420×297", [land.widthMm, land.heightMm], [420, 297]);
+  eq("縦置き A3 = 297×420（入れ替え）", [port.widthMm, port.heightMm], [297, 420]);
+  // 向きで料金は変わらない
+  const pl = calcEstimate(manual({ presetSize: "A2", strokes: 13, orientation: "landscape" }));
+  const pp = calcEstimate(manual({ presetSize: "A2", strokes: 13, orientation: "portrait" }));
+  eq("向きで税込合計は不変", pl.totalIncTax, pp.totalIncTax);
+}
 
 console.log("⑤ 合計（auto・line：英字12字=12画 / A3）");
 const auto = calcEstimate(

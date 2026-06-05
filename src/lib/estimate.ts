@@ -103,27 +103,45 @@ export function effectiveStrokes(input: EstimateInput): number {
 /**
  * プレビュー用：実際のアクリル板の寸法（mm）と表示ラベルを返す。
  *   preset はサイズ表から、custom は入力 cm から算出（未入力時は基準サイズ）。
+ *   向き（orientation）が portrait のときは縦横を入れ替える（面積＝料金は不変）。
  */
 export function boardSizeMm(input: EstimateInput): {
   widthMm: number;
   heightMm: number;
   label: string;
 } {
+  let widthMm: number;
+  let heightMm: number;
+  let name: string;
+
   if (input.sizeMode === "custom") {
     const w = typeof input.customWidthCm === "number" ? input.customWidthCm : 0;
     const h = typeof input.customHeightCm === "number" ? input.customHeightCm : 0;
     if (w > 0 && h > 0) {
-      return { widthMm: w * 10, heightMm: h * 10, label: `オリジナル ${w}×${h}cm` };
+      widthMm = w * 10;
+      heightMm = h * 10;
+      name = "オリジナル";
+    } else {
+      const ref = pricingConfig.acrylicSizes[pricingConfig.referenceSize];
+      widthMm = ref.widthMm;
+      heightMm = ref.heightMm;
+      name = ref.label;
     }
-    const ref = pricingConfig.acrylicSizes[pricingConfig.referenceSize];
-    return { widthMm: ref.widthMm, heightMm: ref.heightMm, label: ref.label };
+  } else {
+    const s = pricingConfig.acrylicSizes[input.presetSize];
+    widthMm = s.widthMm;
+    heightMm = s.heightMm;
+    name = s.label;
   }
-  const s = pricingConfig.acrylicSizes[input.presetSize];
-  return {
-    widthMm: s.widthMm,
-    heightMm: s.heightMm,
-    label: `${s.label}・約${Math.round(s.widthMm / 10)}×${Math.round(s.heightMm / 10)}cm`,
-  };
+
+  // 縦置きなら縦横入れ替え
+  if (input.orientation === "portrait") {
+    [widthMm, heightMm] = [heightMm, widthMm];
+  }
+
+  const orient = input.orientation === "portrait" ? "縦" : "横";
+  const label = `${name}・約${Math.round(widthMm / 10)}×${Math.round(heightMm / 10)}cm（${orient}）`;
+  return { widthMm, heightMm, label };
 }
 
 /** 円未満を四捨五入して整数の金額にする */

@@ -32,6 +32,7 @@ export const defaultEstimateInput: EstimateInput = {
   color: "pink",
   font: "round",
   tubeStyle: "line",
+  orientation: "landscape",
 };
 
 const STORAGE_KEY = "tenya-wanya:estimate";

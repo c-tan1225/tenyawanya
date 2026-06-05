@@ -9,7 +9,7 @@ import { neonHex, neonColorOrder } from "@/lib/colors";
 import { loadImageFromFile, estimateStrokesFromImage } from "@/lib/imageStrokes";
 import { StepHeading } from "./Choice";
 import { NeonPreview, neonFontLabel, neonFontStack } from "@/components/ui/NeonPreview";
-import type { NeonFont, TubeStyle } from "@/lib/types";
+import type { NeonFont, TubeStyle, Orientation } from "@/lib/types";
 import { formatPlusYen } from "@/lib/format";
 
 /**
@@ -158,6 +158,43 @@ export function StepStrokes() {
         </div>
       </div>
 
+      {/* 板の向き（横置き / 縦置き） */}
+      <div className="mb-4">
+        <p className="mb-2 font-round text-[13px] font-bold text-ink/70">向き</p>
+        <div className="grid grid-cols-2 gap-2.5">
+          {(
+            [
+              { key: "landscape", title: "横置き", w: 22, h: 15 },
+              { key: "portrait", title: "縦置き", w: 15, h: 22 },
+            ] as { key: Orientation; title: string; w: number; h: number }[]
+          ).map((o) => {
+            const selected = input.orientation === o.key;
+            return (
+              <button
+                key={o.key}
+                type="button"
+                onClick={() => update({ orientation: o.key })}
+                aria-pressed={selected}
+                className={`flex items-center gap-3 rounded-2xl px-4 py-3 transition-all ${
+                  selected
+                    ? "bg-cream-soft shadow-soft ring-[1.5px] ring-ink"
+                    : "bg-cream-soft/70 ring-1 ring-ink/[0.08] hover:ring-ink/25"
+                }`}
+              >
+                <span
+                  className={`shrink-0 rounded-[3px] ${selected ? "bg-ink" : "bg-ink/30"}`}
+                  style={{ width: o.w, height: o.h }}
+                  aria-hidden
+                />
+                <span className="font-round text-[15px] font-bold text-ink">
+                  {o.title}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* ライブプレビュー（アクリル板の形・サイズ・太さを反映） */}
       <NeonPreview
         text={input.text}
@@ -179,9 +216,10 @@ export function StepStrokes() {
         <textarea
           value={input.text}
           onChange={(e) => update({ text: e.target.value })}
-          rows={2}
-          placeholder="例）Happy Wedding ／ ふたりの名前 ／ 好きな言葉 など（改行もできます）"
-          className="w-full rounded-2xl bg-cream-soft px-4 py-3.5 font-sans text-sm text-ink outline-none ring-1 ring-ink/12 transition-shadow focus:ring-2 focus:ring-ink/40"
+          rows={3}
+          enterKeyHint="enter"
+          placeholder="例）Happy Wedding ／ ふたりの名前 ／ 好きな言葉 など（改行＝Enterでプレビューも改行）"
+          className="w-full whitespace-pre-wrap rounded-2xl bg-cream-soft px-4 py-3.5 font-sans text-sm text-ink outline-none ring-1 ring-ink/12 transition-shadow focus:ring-2 focus:ring-ink/40"
         />
       </label>
 

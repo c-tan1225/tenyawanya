@@ -19,6 +19,9 @@ export type NeonFont = "round" | "hand";
 /** チューブの作り方：line＝1本ライン / outline＝縁取り */
 export type TubeStyle = "line" | "outline";
 
+/** 板の向き：landscape＝横置き / portrait＝縦置き（料金影響なし） */
+export type Orientation = "landscape" | "portrait";
+
 /** ネオンカラー（料金には影響せず、問い合わせフォームのご希望カラー選択肢に使用） */
 export type NeonColor =
   | "white"
@@ -56,6 +59,8 @@ export interface EstimateInput {
   font: NeonFont;
   /** チューブの作り方（line＝1本ライン / outline＝縁取り）。画数とプレビューに影響 */
   tubeStyle: TubeStyle;
+  /** 板の向き（landscape＝横置き / portrait＝縦置き）。プレビューの縦横に影響・料金影響なし */
+  orientation: Orientation;
 }
 
 /** 見積もり結果の内訳1行 */
