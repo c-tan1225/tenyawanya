@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  てんヤわんヤ グローバルスタイル
+  ─────────────────────────────
+  高級ハンドメイドブランドLPの土台。
+  ・暖かいオフホワイトの地色／読みやすい本文設定
+  ・淡いオーロラ状グラデーション、ヘアライン、ガラス面
+  ・ネオン発光はごく控えめなアクセントとして
+*/
+
+:root {
+  --bg: #faf7f1;     /* cream */
+  --fg: #24222a;     /* ink */
+  --hair: rgba(36, 34, 42, 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* 日本語の約物を詰めて読みやすく */
+  font-feature-settings: "palt" 1;
+  letter-spacing: 0.01em;
+  /* 日本語を文節単位で改行（対応ブラウザのみ。非対応は通常折り返しにフォールバック） */
+  word-break: auto-phrase;
+  line-break: strict;
+}
+
+/* 見出しは字間を少し詰めて引き締める */
+h1, h2, h3, h4 {
+  letter-spacing: -0.01em;
+}
+
+/* 選択範囲 */
+::selection {
+  background: rgba(255, 95, 162, 0.22);
+  color: #24222a;
+}
+
+/* フォーカスリング（キーボード操作時のみ） */
+:focus-visible {
+  outline: 2px solid rgba(255, 95, 162, 0.55);
+  outline-offset: 2px;
+}
+
+/* 動きを抑える設定のユーザーにはアニメーションを止める */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer components {
+  /* ネオン発光テキスト（白い管芯＋色のハロー。やや強めに発光） */
+  .neon-text {
+    color: #fff;
+    text-shadow:
+      0 0 1px #fff,
+      0 0 5px #fff,
+      0 0 11px var(--glow, #ff5fa2),
+      0 0 24px var(--glow, #ff5fa2),
+      0 0 46px color-mix(in srgb, var(--glow, #ff5fa2) 70%, transparent),
+      0 0 78px color-mix(in srgb, var(--glow, #ff5fa2) 45%, transparent);
+  }
+
+  /* 明るい面で使う、線だけの繊細なネオン下線 */
+  .tube-underline {
+    background-image: linear-gradient(var(--glow, #ff5fa2), var(--glow, #ff5fa2));
+    background-repeat: no-repeat;
+    background-position: 0 92%;
+    background-size: 100% 0.18em;
+    border-radius: 999px;
+  }
+
+  /* ガラス面（半透明＋ぼかし＋ヘアライン） */
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border: 1px solid rgba(36, 34, 42, 0.06);
+  }
+  .glass-dark {
+    background: rgba(22, 20, 25, 0.55);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* ヘアライン枠（border-2 の代替） */
+  .hairline {
+    border: 1px solid var(--hair);
+  }
+
+  /* 暗い面の上に置く、ぼかしたネオングロウ（オーロラ） */
+  .aurora {
+    filter: blur(64px);
+    opacity: 0.5;
+    border-radius: 9999px;
+  }
+}
+
+@layer utilities {
+  /* 行末の折り返しを整える */
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* スクロールバー非表示 */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* セクションの入場アニメ用（必要に応じて付与） */
+  .reveal {
+    animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
