@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { NeonText } from "@/components/ui/NeonText";
 import { Balance } from "@/components/ui/Balance";
+import { StarField } from "./StarField";
 import { neonHex } from "@/lib/colors";
 
 /**
@@ -11,15 +12,17 @@ export function CTASection() {
   return (
     <section className="relative isolate overflow-hidden bg-night py-28 md:py-40">
       <div
-        className="aurora absolute left-1/4 top-0 h-80 w-80 opacity-40"
+        className="aurora absolute left-1/4 top-0 h-80 w-80 opacity-50"
         style={{ background: neonHex.pink }}
         aria-hidden
       />
       <div
-        className="aurora absolute bottom-0 right-1/4 h-80 w-80 opacity-40"
+        className="aurora absolute bottom-0 right-1/4 h-80 w-80 opacity-50"
         style={{ background: neonHex.blue }}
         aria-hidden
       />
+      {/* 背景を流れる中抜きの星 */}
+      <StarField count={12} sparkleCount={8} />
 
       <div className="reveal relative mx-auto max-w-3xl px-6 text-center">
         <h2 className="text-balance font-round text-[2rem] font-bold leading-[1.3] text-cream md:text-[3rem]">

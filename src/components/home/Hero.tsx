@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/Button";
 import { NeonText } from "@/components/ui/NeonText";
 import { Balance } from "@/components/ui/Balance";
+import { StarField } from "./StarField";
+import { NeonMarquee } from "./NeonMarquee";
 import { neonHex } from "@/lib/colors";
 
 /**
@@ -10,20 +12,20 @@ import { neonHex } from "@/lib/colors";
  */
 export function Hero() {
   return (
-    <section className="relative isolate flex min-h-[92vh] items-center overflow-hidden bg-night px-6 pb-24 pt-36 md:min-h-screen md:pt-40">
-      {/* やわらかなオーロラ（ぼかしたネオングロウ） */}
+    <section className="relative isolate flex min-h-[92vh] flex-col overflow-hidden bg-night pt-32 md:min-h-screen md:pt-36">
+      {/* やわらかなオーロラ（ぼかしたネオングロウ）— 少し強めに */}
       <div
-        className="aurora absolute -left-32 top-1/4 h-[28rem] w-[28rem]"
+        className="aurora absolute -left-32 top-1/4 h-[30rem] w-[30rem] opacity-60"
         style={{ background: neonHex.pink }}
         aria-hidden
       />
       <div
-        className="aurora absolute -right-24 top-10 h-[24rem] w-[24rem] opacity-40"
+        className="aurora absolute -right-24 top-6 h-[26rem] w-[26rem] opacity-50"
         style={{ background: neonHex.blue }}
         aria-hidden
       />
       <div
-        className="aurora absolute bottom-0 left-1/3 h-[26rem] w-[26rem] opacity-40"
+        className="aurora absolute bottom-0 left-1/3 h-[28rem] w-[28rem] opacity-50"
         style={{ background: neonHex.purple }}
         aria-hidden
       />
@@ -38,7 +40,10 @@ export function Hero() {
         aria-hidden
       />
 
-      <div className="reveal relative mx-auto max-w-4xl text-center">
+      {/* 背景を流れる中抜きの星 */}
+      <StarField />
+
+      <div className="reveal relative mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-6 text-center">
         <p className="mb-7 inline-flex items-center gap-2.5 rounded-pill px-4 py-1.5 font-display text-[11px] font-semibold uppercase tracking-eyebrow text-cream/70 ring-1 ring-cream/15">
           <span
             className="h-1.5 w-1.5 rounded-full"
@@ -82,6 +87,9 @@ export function Hero() {
           className="mt-7 block text-[13px] tracking-wide text-cream/40"
         />
       </div>
+
+      {/* 実際のネオン作品を流す写真マーキー（作品の良さをひと目で） */}
+      <NeonMarquee className="reveal mt-12 w-full pb-10 md:mt-16 md:pb-14" />
     </section>
   );
 }

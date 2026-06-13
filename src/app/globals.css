@@ -137,3 +137,78 @@ h1, h2, h3, h4 {
     animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 }
+
+/* 背景を流れる中抜きの星（ヒーロー用）。CSS変数で1つずつ動きを変える */
+@keyframes star-drift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.9);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--op, 0.5);
+  }
+  88% {
+    opacity: var(--op, 0.5);
+  }
+  100% {
+    transform: translate3d(var(--dx, 0), var(--dy, -780px), 0)
+      rotate(var(--rot, 90deg)) scale(1.05);
+    opacity: 0;
+  }
+}
+.star-drift {
+  animation: star-drift var(--dur, 16s) linear infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform, opacity;
+}
+
+/* その場で瞬く小さなキラキラ（4点星＋点）。明滅＋わずかな拡縮 */
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(0.4) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1) rotate(45deg);
+    opacity: var(--op, 0.9);
+  }
+}
+.twinkle {
+  animation: twinkle var(--dur, 3.6s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform, opacity;
+}
+
+/* 作品写真の横スクロール（マーキー）。2列を逆方向に流す */
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+.marquee-left {
+  animation: marquee-left var(--dur, 46s) linear infinite;
+}
+.marquee-right {
+  animation: marquee-right var(--dur, 60s) linear infinite;
+}
+/* ホバーで一時停止（クリックしやすく） */
+.marquee-row:hover .marquee-track {
+  animation-play-state: paused;
+}

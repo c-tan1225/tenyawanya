@@ -2,6 +2,8 @@ import Link from "next/link";
 import { works } from "@/data/works";
 import { WorkCard } from "@/components/works/WorkCard";
 import { Button } from "@/components/ui/Button";
+import { Eyebrow } from "@/components/ui/Eyebrow";
+import { neonHex } from "@/lib/colors";
 
 /**
  * TOP の制作事例（抜粋）。
@@ -11,13 +13,22 @@ export function FeaturedWorks() {
   const picks = works.slice(0, 6);
 
   return (
-    <section className="bg-cream-deep/50 py-24 md:py-36">
-      <div className="mx-auto max-w-6xl px-6">
+    <section className="relative isolate overflow-hidden bg-cream-deep/50 py-24 md:py-36">
+      {/* ネオンの色ぼかし（明るい面にも色味を） */}
+      <div
+        className="aurora absolute -left-20 top-10 h-72 w-72 opacity-25"
+        style={{ background: neonHex.pink }}
+        aria-hidden
+      />
+      <div
+        className="aurora absolute -right-16 bottom-0 h-72 w-72 opacity-20"
+        style={{ background: neonHex.blue }}
+        aria-hidden
+      />
+      <div className="relative mx-auto max-w-6xl px-6">
         <div className="mb-12 flex items-end justify-between gap-4">
           <div>
-            <p className="font-display text-[11px] font-semibold uppercase tracking-eyebrow text-ink/45">
-              Works
-            </p>
+            <Eyebrow color={neonHex.green}>Works</Eyebrow>
             <h2 className="mt-4 font-round text-3xl font-bold text-ink md:text-[2.5rem]">
               これまでの灯り
             </h2>

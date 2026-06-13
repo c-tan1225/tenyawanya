@@ -1,5 +1,6 @@
 import { neonHex } from "@/lib/colors";
 import { Balance } from "@/components/ui/Balance";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 /**
  * TOP のコンセプト3点。
@@ -43,11 +44,20 @@ const concepts = [
 
 export function ConceptStrip() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-24 md:py-36">
-      <div className="mx-auto mb-14 max-w-2xl text-center md:mb-20">
-        <p className="font-display text-[11px] font-semibold uppercase tracking-eyebrow text-ink/45">
-          Why tenya wanya
-        </p>
+    <section className="relative isolate overflow-hidden py-24 md:py-36">
+      {/* ネオンの色ぼかし */}
+      <div
+        className="aurora absolute -left-24 top-16 h-72 w-72 opacity-20"
+        style={{ background: neonHex.pink }}
+        aria-hidden
+      />
+      <div
+        className="aurora absolute -right-20 bottom-10 h-72 w-72 opacity-[0.18]"
+        style={{ background: neonHex.purple }}
+        aria-hidden
+      />
+      <div className="relative mx-auto mb-14 max-w-2xl px-6 text-center md:mb-20">
+        <Eyebrow color={neonHex.pink}>Why tenya wanya</Eyebrow>
         <h2 className="mt-4 text-balance font-round text-3xl font-bold leading-[1.3] text-ink md:text-[2.5rem]">
           ひとつだけの灯りを、
           <br className="hidden sm:block" />
@@ -55,7 +65,7 @@ export function ConceptStrip() {
         </h2>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="relative mx-auto grid max-w-6xl gap-6 px-6 md:grid-cols-3">
         {concepts.map((c) => (
           <div
             key={c.title}

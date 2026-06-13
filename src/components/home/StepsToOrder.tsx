@@ -1,5 +1,6 @@
 import { neonHex } from "@/lib/colors";
 import { Balance } from "@/components/ui/Balance";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 /**
  * TOP「オーダーの流れ」4ステップ。
@@ -30,17 +31,26 @@ const steps = [
 
 export function StepsToOrder() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-24 md:py-36">
-      <div className="mb-14 text-center md:mb-20">
-        <p className="font-display text-[11px] font-semibold uppercase tracking-eyebrow text-ink/45">
-          How to order
-        </p>
+    <section className="relative isolate overflow-hidden py-24 md:py-36">
+      {/* ネオンの色ぼかし */}
+      <div
+        className="aurora absolute -right-24 top-12 h-72 w-72 opacity-20"
+        style={{ background: neonHex.blue }}
+        aria-hidden
+      />
+      <div
+        className="aurora absolute -left-20 bottom-8 h-72 w-72 opacity-[0.16]"
+        style={{ background: neonHex.green }}
+        aria-hidden
+      />
+      <div className="relative mx-auto mb-14 max-w-6xl px-6 text-center md:mb-20">
+        <Eyebrow color={neonHex.blue}>How to order</Eyebrow>
         <h2 className="mt-4 font-round text-3xl font-bold text-ink md:text-[2.5rem]">
           オーダーの流れ
         </h2>
       </div>
 
-      <ol className="grid gap-6 md:grid-cols-4">
+      <ol className="relative mx-auto grid max-w-6xl gap-6 px-6 md:grid-cols-4">
         {steps.map((s, i) => (
           <li
             key={s.title}
